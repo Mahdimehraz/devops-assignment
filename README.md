@@ -1,15 +1,64 @@
-# Devops assignment
+## 🌐 Using a Custom Domain
 
-This repository contains a simple api server written in laravel. 
+1. **Configure your DNS records**:
+   - Add an **A record** pointing to your server's IP address.
+   - Example:
 
-## API Requirements
-- PHP 8.2.22
-- MySQL 8.0.39
-- Redis 7.4
+| Type | Name            | Value          |
+|------|-----------------|----------------|
+| A    | @ (root domain) | 192.168.1.100  |
+| A    | www             | 192.168.1.100  |
 
-## Task 1
-- Dockerize the application for production purposes.
-- Create a docker compose yml file to run the application.
-- Provide nginx configuration to serve the application.
+2. **Update Nginx config**:
+   Change the `server_name` value in `nginx.conf` to your domain:
 
-**Note:** Commit messages should adhere to the Conventional Commits standard. Learn more about it here: https://www.conventionalcommits.org/en/v1.0.0/
+   ```nginx
+   server_name yourdomain.com www.yourdomain.com;
+   ```
+
+## 🔒 Enabling HTTPS with Certbot (Let's Encrypt)
+
+1. **Install Certbot**:
+
+   ```bash
+   sudo apt update
+   sudo apt install certbot python3-certbot-nginx
+   ```
+
+2. **Obtain an SSL certificate**:
+
+   Run Certbot for Nginx:
+
+   ```bash
+   sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+   ```
+
+3. **Verify auto-renewal**:
+
+   Check that Certbot's auto-renewal service is active:
+
+   ```bash
+   sudo systemctl status certbot.timer
+   ```
+
+4. **Test renewal process**:
+
+   ```bash
+   sudo certbot renew --dry-run
+   ```
+
+After this, Nginx will automatically redirect HTTP traffic to HTTPS.
+
+## ✅ Testing and Deployment
+
+- Make sure your Docker Compose setup is running:
+
+```bash
+docker-compose up -d --build
+```
+
+- Visit your domain to check if everything works:
+
+👉 https://yourdomain.com
+
+---
