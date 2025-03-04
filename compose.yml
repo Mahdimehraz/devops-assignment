@@ -2,14 +2,10 @@ version: '3.8'
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image:  laravel-image:latest
     container_name: laravel_app
     restart: unless-stopped
     working_dir: /var/www/html
-    volumes:
-      - .:/var/www/html
     environment:
       APP_ENV: ${APP_ENV}
       APP_KEY: ${APP_KEY}

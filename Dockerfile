@@ -15,9 +15,11 @@ RUN sed -i 's|http://deb.debian.org|http://mirror.arvancloud.ir|' /etc/apt/sourc
     && docker-php-ext-install gd pdo pdo_mysql
 
 COPY --from=docker.arvancloud.ir/composer:2.8.5 /usr/bin/composer /usr/bin/composer
-COPY . .
+COPY composer.json composer.lock ./
 
 RUN composer install --no-dev --optimize-autoloader
+
+COPY . .
 
 EXPOSE 9000
 
